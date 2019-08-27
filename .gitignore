@@ -1,0 +1,11 @@
+# Service files
+*.log*
+bash.exe.stackdump
+
+# NPM files
+node_modules/
+npm-debug.*
+package-lock.json
+
+# Project distributive folder
+dist/
