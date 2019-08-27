@@ -1,4 +1,4 @@
-const User = require('./user.js');
+const User = require('./user');
 
 const bob = new User('Боб');
 const fedya = new User('Федя');
