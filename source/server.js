@@ -1,6 +1,16 @@
+const db = require('db')
+db.connect();
+
+const log = require('./logger')(module)
 const User = require('./user');
 
-const bob = new User('Боб');
-const fedya = new User('Федя');
+function run() {
+  const bob = new User('Боб');
+  const fedya = new User('Федя');
 
-bob.hello(fedya);
+  log(db.getDict('Run successful'));
+  bob.hello(fedya);
+}
+
+if (module.parent) exports.run = run;
+else run();

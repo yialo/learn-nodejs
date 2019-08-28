@@ -1,4 +1,5 @@
-const phrases = require('./locale.json');
+const { getDict } = require('db');
+const log = require('../logger')(module);
 
 module.exports = class User {
   constructor(name) {
@@ -6,8 +7,8 @@ module.exports = class User {
   }
 
   hello(who) {
-    console.log(
-      `${phrases.hello}, ${who.name}`
+    log(
+      `${getDict('hello')}, ${who.name}`
         .replace(/^[а-я]/, (matched) => matched.toUpperCase())
     );
   }
