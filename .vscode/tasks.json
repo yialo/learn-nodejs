@@ -9,9 +9,9 @@
       "command": "echo Hello"
     },
     {
-      "label": "server",
+      "label": "dev",
       "type": "shell",
-      "command": "node server.js",
+      "command": "supervisor server.js",
       "options": {
         "cwd": "${workspaceRoot}/source/web-server"
       },
