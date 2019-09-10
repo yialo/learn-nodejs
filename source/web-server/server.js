@@ -8,8 +8,7 @@ const PORT = 1337;
 
 const server = http.createServer((request, response) => {
   const parsedUrl = url.parse(request.url, true);
-
-  WTF();
+  debugger;
 
   if (
     request.method = 'GET'
