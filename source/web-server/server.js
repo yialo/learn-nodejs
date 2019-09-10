@@ -5,12 +5,11 @@ const url = require('url');
 
 const HOST = '127.0.0.1';
 const PORT = 1337;
-debugger;
 
 const server = http.createServer((request, response) => {
-  console.log(request.headers);
-
   const parsedUrl = url.parse(request.url, true);
+
+  WTF();
 
   if (
     request.method = 'GET'
