@@ -28,7 +28,7 @@
       }
     },
     {
-      "label": "kill_all",
+      "label": "kill_node",
       "type": "shell",
       "command": "taskkill -f -im node.exe"
     }
