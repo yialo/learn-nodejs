@@ -1,7 +1,14 @@
 'use strict';
 
 const http = require('http');
-const debug = require('debug')('server');
+const winston = require('winston');
+
+const logger = winston.createLogger({
+  level: 'debug',
+  transports: [
+    new winston.transports.Console(),
+  ],
+});
 
 const HOST = '127.0.0.1';
 const PORT = 1337;
@@ -12,4 +19,4 @@ server.on('request', require('./request'));
 
 server.listen(PORT, HOST);
 
-debug('Server is running');
+logger.info('Server is running');
