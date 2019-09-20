@@ -1,8 +1,10 @@
 {
+  "description": "NodeJS study project: web server",
   "devDependencies": {
     "debug": "4.1.1",
     "winston": "3.2.1"
   },
+  "license": "ISC",
   "name": "learn-nodejs-web-server",
   "version": "0.0.0"
 }
