@@ -22,7 +22,7 @@
     {
       "label": "dev",
       "type": "shell",
-      "command": "nodemon --inspect=127.0.0.1:4999 ref.js",
+      "command": "nodemon --inspect=127.0.0.1:4999 set-immediate.js",
       "options": {
         "cwd": "${workspaceRoot}/source/timers"
       }
@@ -30,7 +30,7 @@
     {
       "label": "simple-launch",
       "type": "shell",
-      "command": "node ref.js",
+      "command": "node set-immediate.js",
       "options": {
         "cwd": "${workspaceRoot}/source/timers"
       }
