@@ -1,14 +1,7 @@
 'use strict';
 
 const url = require('url');
-const winston = require('winston');
-
-const logger = winston.createLogger({
-  level: 'debug',
-  transports: [
-    new winston.transports.Console(),
-  ],
-});
+const logger = require('./logger')(module);
 
 module.exports = (request, response) => {
   const parsedUrl = url.parse(request.url, true);

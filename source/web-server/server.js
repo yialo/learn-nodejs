@@ -1,14 +1,7 @@
 'use strict';
 
 const http = require('http');
-const winston = require('winston');
-
-const logger = winston.createLogger({
-  level: 'debug',
-  transports: [
-    new winston.transports.Console(),
-  ],
-});
+const logger = require('./logger')(module);
 
 const HOST = '127.0.0.1';
 const PORT = 1337;
