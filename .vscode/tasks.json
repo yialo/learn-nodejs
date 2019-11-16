@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "inspect",
+      "label": "inspect-brk",
       "type": "shell",
       "command": "nodemon --inspect-brk=127.0.0.1:4999 pow.js",
       "options": {
@@ -22,9 +22,17 @@
     {
       "label": "dev",
       "type": "shell",
-      "command": "nodemon --inspect=127.0.0.1:4999 server.js",
+      "command": "nodemon --inspect=127.0.0.1:4999 ref.js",
       "options": {
-        "cwd": "${workspaceRoot}/source/async-dev"
+        "cwd": "${workspaceRoot}/source/timers"
+      }
+    },
+    {
+      "label": "simple-launch",
+      "type": "shell",
+      "command": "node ref.js",
+      "options": {
+        "cwd": "${workspaceRoot}/source/timers"
       }
     },
     {
