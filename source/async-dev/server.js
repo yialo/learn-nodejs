@@ -12,10 +12,23 @@ const makeRequest = (request, response) => {
   let info;
 
   if (request.url === '/') {
-    info = fs.readFileSync('index.html');
-    response.end(info);
-  } else if (request.url === '/now') {
-    response.end(new Date().toString());
+    fs.readFile('index.html', (err, info) => {
+      if (err) {
+        console.error(err);
+
+        response.statusCode = 500;
+        response.end('Internal server error occurs');
+
+        return;
+      }
+
+      response.end(info);
+    });
+  } else {
+    console.warn('Unknown URL');
+
+    response.statusCode = 404;
+    response.end('Page not found');
   }
 };
 
