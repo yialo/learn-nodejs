@@ -22,7 +22,7 @@
     {
       "label": "dev",
       "type": "shell",
-      "command": "nodemon --inspect=127.0.0.1:4999 compare.js",
+      "command": "nodemon --inspect=127.0.0.1:4999 read.js",
       "options": {
         "cwd": "${workspaceRoot}/source/file-system"
       }
