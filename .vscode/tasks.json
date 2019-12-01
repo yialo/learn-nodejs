@@ -4,6 +4,19 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "kill_node",
+      "type": "shell",
+      "command": "taskkill -f -im node.exe"
+    },
+    {
+      "label": "dev",
+      "type": "shell",
+      "command": "nodemon --inspect=127.0.0.1:4999 server.js",
+      "options": {
+        "cwd": "${workspaceRoot}/source/file-path"
+      }
+    },
+    {
       "label": "inspect-brk",
       "type": "shell",
       "command": "nodemon --inspect-brk=127.0.0.1:4999 pow.js",
@@ -12,33 +25,12 @@
       },
     },
     {
-      "label": "echo",
-      "type": "shell",
-      "command": "echo Hello",
-      "options": {
-        "cwd": "${workspaceRoot}/source/web-server"
-      },
-    },
-    {
-      "label": "dev",
-      "type": "shell",
-      "command": "nodemon --inspect=127.0.0.1:4999 read.js",
-      "options": {
-        "cwd": "${workspaceRoot}/source/file-system"
-      }
-    },
-    {
       "label": "simple-launch",
       "type": "shell",
       "command": "node --inspect=127.0.0.1:4999 next-tick.js",
       "options": {
         "cwd": "${workspaceRoot}/source/timers"
       }
-    },
-    {
-      "label": "kill_node",
-      "type": "shell",
-      "command": "taskkill -f -im node.exe"
     }
   ]
 }
