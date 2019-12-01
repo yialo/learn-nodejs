@@ -8,7 +8,11 @@ const url = require('url');
 
 const ROOT = path.join(__dirname, '/public');
 
-const checkAccess = (req) => (url.parse(req.url, true).query.secret === 'hello');
+const checkAccess = (req) => {
+  const address = url.parse(req.url, true);
+
+  return (address.query.secret === 'hello');
+};
 
 const makeRequestFeedback = (res, code) => {
   res.statusCode = code;
@@ -76,7 +80,9 @@ const server = http.createServer((req, res) => {
     return;
   }
 
-  sendFileSafe(url.parse(req.url).pathname, res);
+  const address = url.parse(req.url);
+
+  sendFileSafe(address.pathname, res);
 });
 
 server.listen(3000);
