@@ -11,7 +11,7 @@
     {
       "label": "dev",
       "type": "shell",
-      "command": "nodemon --inspect=127.0.0.1:4999 fs-read.js",
+      "command": "nodemon --inspect=127.0.0.1:4999 pipe.js",
       "options": {
         "cwd": "${workspaceRoot}/source/streams"
       }
