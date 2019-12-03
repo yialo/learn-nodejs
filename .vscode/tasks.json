@@ -11,9 +11,9 @@
     {
       "label": "dev",
       "type": "shell",
-      "command": "nodemon --inspect=127.0.0.1:4999 pipe.js",
+      "command": "nodemon --inspect=127.0.0.1:4999 server.js",
       "options": {
-        "cwd": "${workspaceRoot}/source/streams"
+        "cwd": "${workspaceRoot}/source/long-polling-chat"
       }
     },
     {
