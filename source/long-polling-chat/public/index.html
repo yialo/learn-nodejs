@@ -6,19 +6,71 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Node.js long-polling chat</title>
 
-    <style></style>
+    <style>
+      :root {
+        --border-radius: 0.25rem;
+
+        font-size: 16px;
+      }
+
+      .page {
+        padding: 1.5rem;
+      }
+
+      .wrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .heading {
+        margin-top: 0;
+        margin-bottom: 1.5rem;
+        font: 700 1.5rem / 1 "Arial", sans-serif;
+      }
+
+      .chat-publisher {
+        display: flex;
+        padding: 1.5rem;
+        border-radius: var(--border-radius);
+        background-color: #dcdcdc;
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
+      }
+
+      .field-wrapper {
+        margin-right: 1rem;
+      }
+
+      .field {
+        border: 1px solid #b9b9b9;
+        border-radius: var(--border-radius);
+        padding: 0.5rem;
+        font-size: 1rem;
+      }
+
+      .button {
+        border-style: none;
+        border-radius: var(--border-radius);
+        padding: 0.5rem 1.5rem;
+        font-size: 1rem;
+        color: white;
+        background-color: #9a9a9a;
+      }
+    </style>
   </head>
+
   <body class="page">
-    <h1 class="heading">Welcome to chat!</h1>
-    <form class="publish" action="">
-      <input type="text" placeholder="Введите текст">
-      <button type="submit">Отправить</button>
-    </form>
-
-    <ul></ul>
-
+    <div class="wrapper">
+      <h1 class="heading">Welcome to chat!</h1>
+      <form class="chat-publisher">
+        <label class="field-wrapper">
+          <input class="field" type="text" placeholder="Введите текст">
+        </label>
+        <button class="button" type="submit">Отправить</button>
+      </form>
+      <ul class="list"></ul>
+    </div>
     <script>
-
     </script>
   </body>
 </html>
