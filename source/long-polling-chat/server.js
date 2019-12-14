@@ -21,6 +21,12 @@ const server = http.createServer((req, res) => {
     case '/':
       sendFile('public/index.html', res);
       break;
+    case '/style.css':
+      sendFile('public/style.css', res);
+      break;
+    case '/script.js':
+      sendFile('public/script.js', res);
+      break;
     case '/subscribe':
       chat.subscribe(req, res);
       break;

@@ -5,57 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Node.js long-polling chat</title>
-    <style>
-      :root {
-        --border-radius: 0.25rem;
-
-        font-size: 16px;
-      }
-
-      .page {
-        padding: 1.5rem;
-      }
-
-      .wrapper {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-
-      .heading {
-        margin-top: 0;
-        margin-bottom: 1.5rem;
-        font: 700 1.5rem / 1 "Arial", sans-serif;
-      }
-
-      .form {
-        display: flex;
-        padding: 1.5rem;
-        border-radius: var(--border-radius);
-        background-color: #dcdcdc;
-        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.5);
-      }
-
-      .field-wrapper {
-        margin-right: 1rem;
-      }
-
-      .field {
-        border: 1px solid #b9b9b9;
-        border-radius: var(--border-radius);
-        padding: 0.5rem;
-        font-size: 1rem;
-      }
-
-      .button {
-        border-style: none;
-        border-radius: var(--border-radius);
-        padding: 0.5rem 1.5rem;
-        font-size: 1rem;
-        color: white;
-        background-color: #9a9a9a;
-      }
-    </style>
+    <link rel="stylesheet" href="style.css">
   </head>
 
   <body class="page">
@@ -70,51 +20,6 @@
       <ul class="list" id="messages"></ul>
     </div>
 
-    <script src="/exchange.js">
-      'use strict';
-
-      const $form = document.getElementById('publisher');
-      const $field = $form.elements.message;
-      const $list = document.getElementById('messages');
-
-      $form.addEventListener('submit', (evt) => {
-        evt.preventDefault();
-
-        const xhr = new XMLHttpRequest();
-
-        xhr.open('POST', '/publish');
-        xhr.send(JSON.stringify({ message: $field.value }));
-
-        $field.value = '';
-        return false;
-      });
-
-      const TIMEOUT = 500;
-
-      const subscribe = () => {
-        const xhr = new XMLHttpRequest();
-
-        xhr.addEventListener('load', () => {
-          const $listItem = document.createElement('li');
-
-          $listItem.textContent = xhr.responseText;
-          $list.appendChild($listItem);
-
-          subscribe();
-        });
-
-        const resend = () => {
-          setTimeout(subscribe, TIMEOUT);
-        };
-
-        xhr.addEventListener('error', resend);
-        xhr.addEventListener('abort', resend);
-
-        xhr.open('GET', '/subscribe');
-        xhr.send();
-      };
-
-      subscribe();
-    </script>
+    <script src="script.js"></script>
   </body>
 </html>
