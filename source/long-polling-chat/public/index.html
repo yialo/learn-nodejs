@@ -11,13 +11,15 @@
   <body class="page">
     <div class="wrapper">
       <h1 class="heading">Welcome to chat!</h1>
-      <form class="form" id="publisher">
+      <form class="box form" id="publisher">
         <label class="field-wrapper">
-          <input class="field" type="text" name="message" placeholder="Введите текст">
+          <input class="text-item field" type="text" name="message" placeholder="Type your message here">
         </label>
-        <button class="button" type="submit">Отправить</button>
+        <button class="button" type="submit">Send</button>
       </form>
-      <ul class="list" id="messages"></ul>
+      <div class="box output">
+        <ul class="list" id="messages"></ul>
+      </div>
     </div>
 
     <script src="script.js"></script>

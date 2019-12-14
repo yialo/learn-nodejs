@@ -23,8 +23,9 @@ const subscribe = () => {
 
   xhr.addEventListener('load', () => {
     const $listItem = document.createElement('li');
-
+    $listItem.classList.add('text-item', 'list__item');
     $listItem.textContent = xhr.responseText;
+
     $list.appendChild($listItem);
 
     subscribe();

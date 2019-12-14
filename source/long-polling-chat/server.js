@@ -30,9 +30,25 @@ const server = http.createServer((req, res) => {
     case '/subscribe':
       chat.subscribe(req, res);
       break;
-    case '/publish':
-      chat.publish()
+    case '/publish': {
+      let content = '';
+
+      req
+        .on('readable', () => {
+          const tmp = req.read();
+
+          if (tmp !== null) {
+            content += tmp;
+          }
+        })
+        .on('end', () => {
+          const body = JSON.parse(content);
+          chat.publish(body.message);
+          res.end('ok');
+        });
+
       break;
+    }
     default:
       res.statusCode = 404;
       res.end('Not found');
