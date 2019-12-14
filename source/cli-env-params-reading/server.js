@@ -1,9 +1,10 @@
 'use strict';
 
+const { argv } = require('yargs');
 const http = require('http');
 
 const server = http.createServer((req, res) => {
   res.end('The server is running!');
 });
 
-server.listen(3000);
+server.listen(argv.port);
