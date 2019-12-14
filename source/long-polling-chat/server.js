@@ -35,14 +35,28 @@ const server = http.createServer((req, res) => {
 
       req
         .on('readable', () => {
-          const tmp = req.read();
+          const temp = req.read();
 
-          if (tmp !== null) {
-            content += tmp;
+          if (temp !== null) {
+            if (temp.length > 1e4) {
+              res.statusCode = 413;
+              res.end('Your message is too long for this little chat');
+            }
+
+            content += temp;
           }
         })
         .on('end', () => {
-          const body = JSON.parse(content);
+          let body;
+
+          try {
+            body = JSON.parse(content);
+          } catch {
+            res.statusCode = 400;
+            res.end('Bad request');
+            return;
+          }
+
           chat.publish(body.message);
           res.end('ok');
         });

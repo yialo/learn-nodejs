@@ -4,7 +4,7 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "label": "kill_node",
+      "label": "kill_nodejs",
       "type": "shell",
       "command": "taskkill -f -im node.exe"
     },
