@@ -1,6 +1,4 @@
 {
-  // See https://go.microsoft.com/fwlink/?LinkId=733558
-  // for the documentation about the tasks.json format
   "version": "2.0.0",
   "tasks": [
     {
@@ -11,9 +9,9 @@
     {
       "label": "dev",
       "type": "shell",
-      "command": "nodemon --inspect=127.0.0.1:4999 index.js",
+      "command": "nodemon --inspect=127.0.0.1:4999 server.js --port=3000",
       "options": {
-        "cwd": "${workspaceRoot}/source/async-error-handling"
+        "cwd": "${workspaceRoot}/source/cli-env-params-reading"
       }
     },
     {

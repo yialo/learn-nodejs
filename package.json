@@ -1,0 +1,13 @@
+{
+  "dependencies": {
+    "yargs": "15.0.2"
+  },
+  "devDependencies": {},
+  "license": "ISC",
+  "name": "learn-nodejs",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yialo/learn-nodejs.git"
+  },
+  "version": "0.1.0"
+}
