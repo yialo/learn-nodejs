@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Node.js long-polling chat</title>
-
     <style>
       :root {
         --border-radius: 0.25rem;
@@ -71,8 +70,11 @@
       <ul class="list" id="messages"></ul>
     </div>
 
-    <script>
-      const $form = document.getElementsByTagName('publisher');
+    <script src="/exchange.js">
+      'use strict';
+
+      const $form = document.getElementById('publisher');
+      const $field = $form.elements.message;
       const $list = document.getElementById('messages');
 
       $form.addEventListener('submit', (evt) => {
@@ -81,11 +83,13 @@
         const xhr = new XMLHttpRequest();
 
         xhr.open('POST', '/publish');
+        xhr.send(JSON.stringify({ message: $field.value }));
 
-        xhr.send(JSON.stringify({ message: $form.elements.message.value }));
-
+        $field.value = '';
         return false;
       });
+
+      const TIMEOUT = 500;
 
       const subscribe = () => {
         const xhr = new XMLHttpRequest();
@@ -100,14 +104,13 @@
         });
 
         const resend = () => {
-          setTimeout(subscribe, 500);
+          setTimeout(subscribe, TIMEOUT);
         };
 
         xhr.addEventListener('error', resend);
         xhr.addEventListener('abort', resend);
 
         xhr.open('GET', '/subscribe');
-
         xhr.send();
       };
 

@@ -2,6 +2,7 @@
 
 const http = require('http');
 const fs = require('fs');
+const path = require('path');
 
 const chat = require('./chat');
 
@@ -12,13 +13,13 @@ const sendFile = (fileName, res) => {
     res.statusCode = 500;
     res.end('Server error');
   })
-    .pipe();
+    .pipe(res);
 };
 
 const server = http.createServer((req, res) => {
   switch (req.url) {
     case '/':
-      sendFile('index.html', res);
+      sendFile('public/index.html', res);
       break;
     case '/subscribe':
       chat.subscribe(req, res);
