@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "yargs": "15.0.2"
+    "yargs": "16.2.0"
   },
   "devDependencies": {},
   "private": true,
