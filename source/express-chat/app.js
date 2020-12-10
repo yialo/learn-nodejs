@@ -11,6 +11,20 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
+// Middleware
+app.use((req, res, next) => {
+  if (req.url === '/') {
+    res.end('Home page');
+  } else {
+    next();
+  }
+});
+
+app.use((req, res) => {
+  res.status(404).send('Page not found');
+});
+
+/*
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
@@ -39,5 +53,6 @@ app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error');
 });
+ */
 
 module.exports = app;
