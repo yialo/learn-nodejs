@@ -1,4 +1,5 @@
 {
+  "name": "learn_nodejs-kantor-2013",
   "private": true,
   "dependencies": {
     "yargs": "16.2.0"
