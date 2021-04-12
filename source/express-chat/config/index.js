@@ -1,5 +1,7 @@
 'use strict';
 
-module.exports = {
-  config: require('./config'),
-};
+const { ENV } = require('../constants');
+
+process.env.NODE_ENV = ENV.DEVELOPMENT;
+
+module.exports.config = require('./config');

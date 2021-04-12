@@ -12,7 +12,10 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
-// Middleware
+/**
+ * Middlewares
+ */
+
 app.use((req, res, next) => {
   if (req.url === '/') {
     res.end('Home page');
@@ -23,7 +26,7 @@ app.use((req, res, next) => {
 
 app.use((req, res, next) => {
   if (req.url === '/error') {
-    dsafasdf
+    throw new Error('Boo!');
   } else {
     next();
   }
@@ -74,4 +77,4 @@ app.use((req, res, next) => {
 });
  */
 
-module.exports = app;
+module.exports = { app };
