@@ -6,9 +6,11 @@
  * Module dependencies.
  */
 
-const app = require('../app');
-const debug = require('debug')('express-chat:server');
 const http = require('http');
+const debug = require('debug')('express-chat:server');
+
+const app = require('../app');
+const { config } = require('../config');
 
 /**
  * Normalize a port into a number, string, or false.
@@ -74,7 +76,7 @@ const onListening = () => {
  * Get port from environment and store in Express.
  */
 
-const port = normalizePort(process.env.PORT ?? '3000');
+const port = normalizePort(process.env.PORT ?? config.port);
 app.set('port', port);
 
 /**
