@@ -2,17 +2,15 @@
 
 'use strict';
 
-/**
- * Module dependencies.
- */
-
-const app = require('../app');
-const debug = require('debug')('express-chat:server');
 const http = require('http');
 
-/**
- * Normalize a port into a number, string, or false.
- */
+const { app } = require('../app');
+const { config } = require('../config');
+const { getLogger } = require('../libs/get-logger');
+
+const log = getLogger(module);
+
+/* Normalize a port into a number, string, or false. */
 
 const normalizePort = (val) => {
   const port = Number.parseInt(val, 10);
@@ -30,9 +28,7 @@ const normalizePort = (val) => {
   return false;
 };
 
-/**
- * Event listener for HTTP server "error" event.
- */
+/* Event listener for HTTP server "error" event. */
 
 const onError = (error) => {
   if (error.syscall !== 'listen') {
@@ -40,17 +36,17 @@ const onError = (error) => {
   }
 
   const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    ? `Pipe ${port}`
+    : `Port ${port}`;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
     case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
+      console.error(`${bind} requires elevated privileges`);
       process.exit(1);
       break;
     case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
+      console.error(`${bind} is already in use`);
       process.exit(1);
       break;
     default:
@@ -58,34 +54,18 @@ const onError = (error) => {
   }
 };
 
-/**
- * Event listener for HTTP server "listening" event.
- */
-
 const onListening = () => {
   const addr = server.address();
   const bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    ? `pipe ${addr}`
+    : `port ${addr.port}`;
+  log(`Listening on ${bind}`);
 };
 
-/**
- * Get port from environment and store in Express.
- */
-
-const port = normalizePort(process.env.PORT ?? '3000');
+const port = normalizePort(process.env.PORT ?? config.port);
 app.set('port', port);
 
-/**
- * Create HTTP server.
- */
-
 const server = http.createServer(app);
-
-/**
- * Listen on provided port, on all network interfaces.
- */
 
 server.on('error', onError);
 server.on('listening', onListening);
