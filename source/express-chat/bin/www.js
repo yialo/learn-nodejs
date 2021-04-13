@@ -6,11 +6,11 @@ const http = require('http');
 
 const { app } = require('../app');
 const { config } = require('../config');
-const { log } = require('../libs/log');
+const { getLogger } = require('../libs/get-logger');
 
-/**
- * Normalize a port into a number, string, or false.
- */
+const log = getLogger(module);
+
+/* Normalize a port into a number, string, or false. */
 
 const normalizePort = (val) => {
   const port = Number.parseInt(val, 10);
@@ -28,9 +28,7 @@ const normalizePort = (val) => {
   return false;
 };
 
-/**
- * Event listener for HTTP server "error" event.
- */
+/* Event listener for HTTP server "error" event. */
 
 const onError = (error) => {
   if (error.syscall !== 'listen') {

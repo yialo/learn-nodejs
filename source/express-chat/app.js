@@ -12,38 +12,6 @@ const usersRouter = require('./routes/users');
 
 const app = express();
 
-/**
- * Middlewares
- */
-
-app.use((req, res, next) => {
-  if (req.url === '/') {
-    res.end('Home page');
-  } else {
-    next();
-  }
-});
-
-app.use((req, res, next) => {
-  if (req.url === '/error') {
-    throw new Error('Boo!');
-  } else {
-    next();
-  }
-});
-
-app.use((req, res, next) => {
-  if (req.url === '/break') {
-    next(new Error('Permission denied'));
-  } else {
-    next();
-  }
-});
-
-app.use((req, res) => {
-  res.status(404).send('Page not found');
-});
-
 // error handler
 app.use((err, req, res, next) => {
   // set locals, only providing error in development
