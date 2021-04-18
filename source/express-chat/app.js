@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const createError = require('http-errors');
 const logger = require('morgan');
+const pug = require('pug');
 
 const { ENV } = require('./constants');
 const indexRouter = require('./routes/index');
