@@ -23,7 +23,7 @@ client.connect(async (error) => {
   const count = await collection.estimatedDocumentCount();
   console.log('count:', count);
 
-  const cursor = collection.find();
+  const cursor = collection.find({ a: 2 });
   const results = await cursor.toArray();
   console.log('results:', results);
 
