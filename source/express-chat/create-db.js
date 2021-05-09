@@ -1,14 +1,17 @@
 'use strict';
 
+const mongoose = require('./libs/mongoose');
 const { User } = require('./models/user');
 
-const user = new User({
-  username: 'Bob',
-  password: 'secret',
-});
+mongoose.connection.on('open', () => {
+  const { db } = mongoose.connection;
 
-user.save().then(() => {
-  User.findOne({ username: 'Bob' }).then((found) => {
-    console.log(found);
-  })
+  db.dropDatabase((error) => {
+    if (error) {
+      throw error;
+    }
+
+    console.log('Stale database deleted');
+    mongoose.disconnect();
+  });
 });
