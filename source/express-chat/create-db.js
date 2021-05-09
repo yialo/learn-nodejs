@@ -3,15 +3,45 @@
 const mongoose = require('./libs/mongoose');
 const { User } = require('./models/user');
 
-mongoose.connection.on('open', () => {
-  const { db } = mongoose.connection;
+const open = (callback) => {
+  mongoose.connection.on('open', callback);
+};
 
-  db.dropDatabase((error) => {
-    if (error) {
-      throw error;
-    }
+const dropDatabase = async () => {};
 
+const createUsers = async () => {};
+
+const close = async () => {};
+
+open(async (openingError) => {
+  if (openingError) {
+    throw openingError;
+  }
+
+  try {
+    await mongoose.connection.dropDatabase();
     console.log('Stale database deleted');
-    mongoose.disconnect();
-  });
+
+    const bob = new User({ username: 'Bob', password: '123' });
+    const bull = new User({ username: 'Bull', password: '456' });
+    const admin = new User({ username: 'admin', password: 'cool' });
+
+    Promise.all([
+      bob.save(),
+      bull.save(),
+      admin.save(),
+    ]).then(
+      (results) => {
+        console.log(`Saved users: ${results}`);
+        mongoose.disconnect().then(() => {
+          console.log('Disconnected');
+        });
+      },
+      (savingError) => {
+        throw savingError;
+      }
+    );
+  } catch (error) {
+    throw error;
+  }
 });
