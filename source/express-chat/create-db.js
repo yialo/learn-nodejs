@@ -1,7 +1,6 @@
 'use strict';
 
-const mongoose = require('./libs/mongoose');
-const { User } = require('./models/user');
+const { mongoose } = require('./libs/mongoose');
 
 const open = (callback) => {
   mongoose.connection.on('open', callback);
@@ -16,17 +15,19 @@ const dropDatabase = async () => {
   }
 };
 
-const createUsers = async () => {
-  const bob = new User({ username: 'Bob', password: '123' });
-  const bull = new User({ username: 'Bull', password: '456' });
-  const admin = new User({ username: 'admin', password: 'cool' });
+const requireModels = () => {
+  require('./models/user');
+};
+
+const createUsers = (userConfigs = []) => {
+  const userSavingPromises = userConfigs.map((config) => {
+    const { User } = mongoose.models;
+    const user = new User(config);
+    return user.save();
+  });
 
   return new Promise((resolve, reject) => {
-    Promise.all([
-      bob.save(),
-      bull.save(),
-      admin.save(),
-    ]).then(
+    Promise.all(userSavingPromises).then(
       (results) => {
         console.log(`Saved users: ${results}`);
         resolve(results);
@@ -47,12 +48,22 @@ const close = async () => {
   }
 };
 
+const userConfigs = [
+  { username: 'Bob', password: '123' },
+  { username: 'Bob', password: '456' },
+  { username: 'admin', password: 'cool' },
+];
+
 open(async (openingError) => {
   if (openingError) {
     throw openingError;
   }
 
-  await dropDatabase();
-  await createUsers();
-  await close();
+  try {
+    await dropDatabase();
+    requireModels();
+    await createUsers(userConfigs);
+  } finally {
+    close();
+  }
 });

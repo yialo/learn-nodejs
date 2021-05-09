@@ -6,4 +6,4 @@ const { config: { mongoose: { uri, options } } } = require('../config');
 
 mongoose.connect(uri, options);
 
-module.exports = mongoose;
+module.exports.mongoose = mongoose;
