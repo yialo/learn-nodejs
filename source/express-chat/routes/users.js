@@ -1,8 +1,31 @@
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const usersRouter = express.Router();
 
-router.get('/', (req, res) => {
-  res.send('respond with a resource');
+const { HttpError } = require('../error');
+const { User } = require('../models/user');
+
+usersRouter.get('/', async (req, res, next) => {
+  try {
+    const users = await User.find({});
+    res.json(users);
+  } catch (error) {
+    next(error);
+  }
 });
 
-module.exports = router;
+usersRouter.get('/:id', async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+
+    if (!user) {
+      next(new HttpError(404, 'User not found'));
+      return;
+    }
+
+    res.json(user);
+  } catch (error) {
+    next(error);
+  }
+});
+
+module.exports.usersRouter = usersRouter;
