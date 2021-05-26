@@ -30,10 +30,6 @@ app.use(sendHttpErrorMiddleware);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
 app.use((err, req, res, next) => {
   let error = err;
 
@@ -44,7 +40,11 @@ app.use((err, req, res, next) => {
   if (error instanceof HttpError) {
     res.sendHttpError(error);
   } else {
-    res.status(error.status ?? 500);
+    if (!error.status) {
+      error.status = 500;
+    }
+
+    res.status(error.status);
 
     const locals = {
       error: req.app.get('env') === ENV.DEVELOPMENT ? error : {},
@@ -52,6 +52,10 @@ app.use((err, req, res, next) => {
 
     res.render('error', locals);
   }
+});
+
+app.use((req, res, next) => {
+  next(createError(404));
 });
 
 module.exports = { app };

@@ -1,6 +1,8 @@
 extends _layout
 
 block content
-  h1= error.message
-  h2= error.status
+  h1 #{error.message || 'Something went wrong'}
+  if error.status
+    h2 Error status: #{error.status}
+  if error.stack
   pre #{error.stack}
