@@ -2,12 +2,14 @@
 
 const path = require('path');
 
+const MongoStore = require('connect-mongo');
 const cookieParser = require('cookie-parser');
 const express = require('express');
+const session = require('express-session')
 const createError = require('http-errors');
 const logger = require('morgan');
-const pug = require('pug');
 
+const { config } = require('./config');
 const { ENV } = require('./constants');
 const { HttpError } = require('./error');
 const { sendHttpErrorMiddleware } = require('./middleware/send-http-error');
@@ -20,9 +22,23 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
 app.use(logger('dev'));
+
 app.use(express.json());
+
 app.use(express.urlencoded({ extended: false }));
+
 app.use(cookieParser());
+
+app.use(session({
+  secret: config.session.secret,
+  resave: false,
+  saveUninitialized: true,
+  cookie: config.session.cookie,
+  store: MongoStore.create({
+    mongoUrl: config.mongoose.uri,
+  }),
+}));
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(sendHttpErrorMiddleware);
@@ -30,7 +46,7 @@ app.use(sendHttpErrorMiddleware);
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 
-app.use((err, req, res, next) => {
+app.use((err, req, res) => {
   let error = err;
 
   if (typeof err === 'number') {
@@ -51,6 +67,14 @@ app.use((err, req, res, next) => {
     };
 
     res.render('error', locals);
+  }
+});
+
+app.use((req, res) => {
+  if (req.session.numberOfVisits === undefined) {
+    req.session.numberOfVisits = 1;
+  } else {
+    req.session.numberOfVisits += 1;
   }
 });
 
