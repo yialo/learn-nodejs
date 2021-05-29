@@ -1,0 +1,26 @@
+extends _layout
+
+block title
+  | Login | Chat
+
+block content
+  include ./_nav.pug
+  main.main-content
+    h1 Регистрация и вход
+    form.login-form
+      label.login-form__field Введите логин
+        input.login-form__input(type='text')
+      label.login-form__field Введите пароль
+        input.login-form__input(type='password')
+      button.login-form__button(type='submit') Войти
+
+  script.
+    (() => {
+      const $form = document.querySelector('.login-form');
+
+      $form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        console.log('Form submitted');
+      });
+    })();

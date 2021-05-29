@@ -13,8 +13,12 @@ const { config } = require('./config');
 const { ENV } = require('./constants');
 const { HttpError } = require('./error');
 const { sendHttpErrorMiddleware } = require('./middleware/send-http-error');
+
 const { indexRouter } = require('./routes/index');
+const { loginRouter } = require('./routes/login');
 const { usersRouter } = require('./routes/users');
+
+const { logAsJson } = require('./utils');
 
 const app = express();
 
@@ -44,6 +48,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(sendHttpErrorMiddleware);
 
 app.use('/', indexRouter);
+app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 
 app.use((err, req, res) => {

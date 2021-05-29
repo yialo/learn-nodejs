@@ -1,6 +1,21 @@
-nav
-  ul
-    li
-      a(href='/') Home
-    li
-      a(href='/users') Users
+-
+  const links = [
+    {
+      label: 'Home',
+      href: '/',
+    },
+    {
+      label: 'Users',
+      href: '/users',
+    },
+    {
+      label: 'Login',
+      href: '/login',
+    },
+  ];
+
+nav.main-nav
+  ul.main-nav__list
+    each link in links
+      li
+        a(href=link.href) #{link.label}
