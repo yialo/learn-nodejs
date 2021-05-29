@@ -51,6 +51,10 @@ app.use('/', indexRouter);
 app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 
+app.use((req, res, next) => {
+  next(createError(404));
+});
+
 app.use((err, req, res) => {
   let error = err;
 
@@ -81,10 +85,6 @@ app.use((req, res) => {
   } else {
     req.session.numberOfVisits += 1;
   }
-});
-
-app.use((req, res, next) => {
-  next(createError(404));
 });
 
 module.exports = { app };
