@@ -14,6 +14,7 @@ const { ENV } = require('./constants');
 const { HttpError } = require('./error');
 const { sendHttpErrorMiddleware } = require('./middleware/send-http-error');
 
+const { chatRouter } = require('./routes/chat');
 const { indexRouter } = require('./routes/index');
 const { loginRouter } = require('./routes/login');
 const { usersRouter } = require('./routes/users');
@@ -48,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(sendHttpErrorMiddleware);
 
 app.use('/', indexRouter);
+app.use('/chat', chatRouter);
 app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 

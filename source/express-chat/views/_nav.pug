@@ -5,6 +5,10 @@
       href: '/',
     },
     {
+      label: 'Chat',
+      href: '/chat',
+    },
+    {
       label: 'Users',
       href: '/users',
     },
@@ -17,5 +21,5 @@
 nav.main-nav
   ul.main-nav__list
     each link in links
-      li
+      li.main-nav__item
         a(href=link.href) #{link.label}

@@ -1,5 +1,7 @@
-const express = require('express');
-const indexRouter = express.Router();
+'use strict';
+
+const { Router } = require('express');
+const indexRouter = Router();
 
 indexRouter.get('/', (_, res) => {
   res.render('index');

@@ -1,12 +1,13 @@
 extends _layout
 
 block title
-  | Login | Chat
+  = 'Login | '
 
 block content
   include ./_nav.pug
   main.main-content
     h1 Регистрация и вход
+    p Введите имя пользователя. Если такого пользователя нет, он будет создан.
     form.login-form
       label.login-form__field Введите логин
         input.login-form__input(type='text')

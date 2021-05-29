@@ -1,10 +1,12 @@
-const express = require('express');
+'use strict';
+
+const { Router } = require('express');
 const { ObjectID } = require('mongodb');
 
 const { HttpError } = require('../error');
 const { User } = require('../models/user');
 
-const usersRouter = express.Router();
+const usersRouter = Router();
 
 usersRouter.get('/', async (req, res, next) => {
   try {

@@ -1,5 +1,7 @@
-const express = require('express');
-const loginRouter = express.Router();
+'use strict';
+
+const { Router } = require('express');
+const loginRouter = Router();
 
 loginRouter.get('/', (_, res) => {
   res.render('login');
