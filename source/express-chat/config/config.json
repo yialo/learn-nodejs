@@ -3,6 +3,7 @@
   "mongoose": {
     "uri": "mongodb://localhost:27017/chat",
     "options": {
+      "useCreateIndex": true,
       "useNewUrlParser": true,
       "useUnifiedTopology": true
     }

@@ -26,17 +26,15 @@ block content
       const $submit = $form.querySelector('button');
       const $error = $form.querySelector('.login-form__error');
 
-      const send = () => {
-        $error.textContent = '';
-        $username.disabled = true;
-        $password.disabled = true;
-        $submit.disabled = true;
-        $submit.textContent = 'Загружаем...';
+      const send = async () => {
+        const body = new FormData($form);
 
-        window.fetch('/login', {
-          method: 'POST',
-          body: new FormData($form),
-        }).then(({ status }) => {
+        try {
+          const { status } = await window.fetch('/login', {
+            method: 'POST',
+            body,
+          });
+
           if (status === 200) {
             $form.remove();
             $title.textContent = 'Вы вошли на сайт';
@@ -45,9 +43,9 @@ block content
           } else {
             throw new Error(`Что-то пошло не так, статус ошибки: ${status}`);
           }
-        }).catch(({ message }) => {
+        } catch ({ message }) {
           $error.textContent = message;
-        });
+        }
       };
 
       $form.addEventListener('submit', (event) => {
@@ -57,6 +55,12 @@ block content
           $error.textContent = 'Не все поля заполнены';
         } else {
           send();
+
+          $error.textContent = '';
+          $username.disabled = true;
+          $password.disabled = true;
+          $submit.disabled = true;
+          $submit.textContent = 'Загружаем...';
         }
       });
     })();
