@@ -28,6 +28,8 @@ block content
 
       const send = () => {
         $error.textContent = '';
+        $login.disabled = true;
+        $password.disabled = true;
         $submit.disabled = true;
         $submit.textContent = 'Загружаем...';
 
@@ -46,6 +48,7 @@ block content
           }
         }).catch(({ message }) => {
           $error.textContent = message;
+          $
         });
       };
 
