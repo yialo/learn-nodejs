@@ -27,6 +27,8 @@ main {
   padding: 1rem;
 }
 
+/* Login form */
+
 .login-form__field {
   display: block;
 }
@@ -39,6 +41,13 @@ main {
   display: block;
   margin-top: 1rem;
 }
+
+.login-form__error {
+  margin-top: 1rem;
+  color: tomato;
+}
+
+/* Main navigation */
 
 .main-nav {
   padding: 1rem;
