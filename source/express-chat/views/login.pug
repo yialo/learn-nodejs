@@ -10,9 +10,9 @@ block content
     p Введите имя пользователя. Если такого пользователя нет, он будет создан.
     form.login-form
       label.login-form__field Введите логин
-        input.login-form__input(type='text')
+        input.login-form__input(type='text', name='username')
       label.login-form__field Введите пароль
-        input.login-form__input(type='password')
+        input.login-form__input(type='password', name='password')
       button.login-form__button(type='submit') Войти
       p.login-form__error
 
@@ -20,15 +20,15 @@ block content
     (() => {
       const $form = document.querySelector('.login-form');
 
-      const $title = $form.querySelector('h1');
-      const $login = $form.querySelector('[type="text"]');
-      const $password = $form.querySelector('[type="password"]');
+      const $title = document.querySelector('h1');
+      const $username = $form.querySelector('[name="username"]');
+      const $password = $form.querySelector('[name="password"]');
       const $submit = $form.querySelector('button');
       const $error = $form.querySelector('.login-form__error');
 
       const send = () => {
         $error.textContent = '';
-        $login.disabled = true;
+        $username.disabled = true;
         $password.disabled = true;
         $submit.disabled = true;
         $submit.textContent = 'Загружаем...';
@@ -38,9 +38,8 @@ block content
           body: new FormData($form),
         }).then(({ status }) => {
           if (status === 200) {
-            $form.innerHTML = '';
+            $form.remove();
             $title.textContent = 'Вы вошли на сайт';
-            $form.append($title);
 
             window.location.href = '/chat';
           } else {
@@ -48,14 +47,13 @@ block content
           }
         }).catch(({ message }) => {
           $error.textContent = message;
-          $
         });
       };
 
       $form.addEventListener('submit', (event) => {
         event.preventDefault();
 
-        if ($login.value === '' || $password.value === '') {
+        if ($username.value === '' || $password.value === '') {
           $error.textContent = 'Не все поля заполнены';
         } else {
           send();
