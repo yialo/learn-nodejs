@@ -12,15 +12,14 @@ const logger = require('morgan');
 
 const { config } = require('./config');
 const { ENV } = require('./constants');
-const { HttpError } = require('./error');
-const { sendHttpErrorMiddleware } = require('./middleware/send-http-error');
+const { AuthError } = require('./error/auth-error');
+const { HttpError } = require('./error/http-error');
+const { renderHttpErrorMiddleware } = require('./middleware/render-http-error');
 
 const { chatRouter } = require('./routes/chat');
 const { indexRouter } = require('./routes/index');
 const { loginRouter } = require('./routes/login');
 const { usersRouter } = require('./routes/users');
-
-const { logAsJson } = require('./utils');
 
 const app = express();
 
@@ -50,7 +49,7 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(sendHttpErrorMiddleware);
+app.use(renderHttpErrorMiddleware);
 
 app.use('/', indexRouter);
 app.use('/chat', chatRouter);
@@ -61,7 +60,11 @@ app.use((req, res, next) => {
   next(createError(404));
 });
 
-app.use((err, req, res) => {
+app.use((err, req, res, next) => {
+  if (res.headersSent) {
+    return next(err);
+  }
+
   let error = err;
 
   if (typeof err === 'number') {
@@ -69,20 +72,25 @@ app.use((err, req, res) => {
   }
 
   if (error instanceof HttpError) {
-    res.sendHttpError(error);
-  } else {
-    if (!error.status) {
-      error.status = 500;
-    }
-
-    res.status(error.status);
-
-    const locals = {
-      error: req.app.get('env') === ENV.DEVELOPMENT ? error : {},
-    };
-
-    res.render('error', locals);
+    return res.renderHttpError(error);
   }
+
+  if (error instanceof AuthError) {
+    res.status(error.status);
+    return res.send(error);
+  }
+
+  if (!error.status) {
+    error.status = 500;
+  }
+
+  res.status(error.status);
+
+  const locals = {
+    error: req.app.get('env') === ENV.DEVELOPMENT ? error : {},
+  };
+
+  res.render('error', locals);
 });
 
 app.use((req, res) => {

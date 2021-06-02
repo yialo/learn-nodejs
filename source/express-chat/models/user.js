@@ -2,6 +2,7 @@
 
 const crypto = require('crypto');
 
+const { AuthError } = require('../error/auth-error');
 const { mongoose } = require('../libs/mongoose');
 
 const schema = new mongoose.Schema({
@@ -42,14 +43,6 @@ schema.methods.checkPassword = function (password) {
   return this.encryptPassword(password) === this.hashedPassword;
 };
 
-class AuthError extends Error {
-  constructor(message) {
-    super();
-    Error.captureStackTrace(this, HttpError);
-    this.message = message ?? 'AuthError';
-  }
-}
-
 schema.statics.authorize = async (username, password) => {
   const { User } = this;
 
@@ -59,7 +52,7 @@ schema.statics.authorize = async (username, password) => {
     if (user.checkPassword(password)) {
       return user;
     } else {
-      throw new AuthError('Пароль неверный');
+      throw new AuthError('неверный пароль');
     }
   } else {
     const newUser = new User({ username, password });
@@ -69,4 +62,3 @@ schema.statics.authorize = async (username, password) => {
 };
 
 module.exports.User = mongoose.model('User', schema);
-module.exports.AuthError = AuthError;

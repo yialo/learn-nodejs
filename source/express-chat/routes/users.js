@@ -3,7 +3,7 @@
 const { Router } = require('express');
 const { ObjectID } = require('mongodb');
 
-const { HttpError } = require('../error');
+const { HttpError } = require('../error/http-error');
 const { User } = require('../models/user');
 
 const usersRouter = Router();
