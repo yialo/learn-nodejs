@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const session = require('express-session')
 const createError = require('http-errors');
+const multer = require('multer');
 const logger = require('morgan');
 
 const { config } = require('./config');
@@ -23,12 +24,15 @@ const { logAsJson } = require('./utils');
 
 const app = express();
 
+app.use(logger('dev'));
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
-
 app.use(express.json());
+
+const upload = multer();
+app.use(upload.array());
 
 app.use(express.urlencoded({ extended: false }));
 

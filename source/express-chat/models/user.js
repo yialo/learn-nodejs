@@ -42,4 +42,31 @@ schema.methods.checkPassword = function (password) {
   return this.encryptPassword(password) === this.hashedPassword;
 };
 
+class AuthError extends Error {
+  constructor(message) {
+    super();
+    Error.captureStackTrace(this, HttpError);
+    this.message = message ?? 'AuthError';
+  }
+}
+
+schema.statics.authorize = async (username, password) => {
+  const { User } = this;
+
+  const user = await User.findOne({ username });
+
+  if (user) {
+    if (user.checkPassword(password)) {
+      return user;
+    } else {
+      throw new AuthError('Пароль неверный');
+    }
+  } else {
+    const newUser = new User({ username, password });
+    await newUser.save();
+    return newUser;
+  }
+};
+
 module.exports.User = mongoose.model('User', schema);
+module.exports.AuthError = AuthError;

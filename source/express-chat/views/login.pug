@@ -30,18 +30,18 @@ block content
         const body = new FormData($form);
 
         try {
-          const { status } = await window.fetch('/login', {
+          const response = await window.fetch('/login', {
             method: 'POST',
             body,
           });
 
-          if (status === 200) {
+          if (response.status === 200) {
             $form.remove();
             $title.textContent = 'Вы вошли на сайт';
 
             window.location.href = '/chat';
           } else {
-            throw new Error(`Что-то пошло не так, статус ошибки: ${status}`);
+            throw new Error(`Что-то пошло не так, статус ошибки: ${response.status}.`);
           }
         } catch ({ message }) {
           $error.textContent = message;
