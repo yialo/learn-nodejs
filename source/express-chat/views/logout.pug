@@ -1,0 +1,15 @@
+extends _layout
+
+block title
+  = 'Logout | '
+
+block content
+  main
+    p Вы успешно вышли
+
+  script.
+    (() => {
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 1000);
+    })();

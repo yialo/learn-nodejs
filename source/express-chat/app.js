@@ -17,6 +17,7 @@ const { renderHttpErrorMiddleware } = require('./middlewares/render-http-error')
 const { chatRouter } = require('./routes/chat');
 const { indexRouter } = require('./routes/index');
 const { loginRouter } = require('./routes/login');
+const { logoutRouter } = require('./routes/logout');
 const { usersRouter } = require('./routes/users');
 
 const app = express();
@@ -52,14 +53,17 @@ app.use(loadUserMiddleware);
 app.use('/', indexRouter);
 app.use('/chat', chatRouter);
 app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
 app.use('/users', usersRouter);
 
-app.use((req) => {
+app.use((req, _res, next) => {
   if (req.session.numberOfVisits === undefined) {
     req.session.numberOfVisits = 1;
   } else {
     req.session.numberOfVisits += 1;
   }
+
+  next();
 });
 
 app.use((_req, _res, next) => {

@@ -12,10 +12,13 @@
       label: 'Users',
       href: '/users',
     },
-    {
+    user ? ({
       label: 'Login',
       href: '/login',
-    },
+    }) : ({
+      label: 'Logout',
+      href: '/logout',
+    })
   ];
 
 nav.main-nav
