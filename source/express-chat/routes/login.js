@@ -2,7 +2,7 @@
 
 const { Router } = require('express');
 
-const { AuthError } = require('../error/auth-error');
+const { AuthError } = require('../errors/auth-error');
 const { User } = require('../models/user');
 
 const loginRouter = Router();

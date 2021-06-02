@@ -11,11 +11,9 @@ const multer = require('multer');
 const logger = require('morgan');
 
 const { config } = require('./config');
-const { ENV } = require('./constants');
-const { AuthError } = require('./error/auth-error');
-const { HttpError } = require('./error/http-error');
-const { renderHttpErrorMiddleware } = require('./middleware/render-http-error');
-
+const { errorHandlerMiddleware } = require('./middlewares/error-handler');
+const { loadUserMiddleware } = require('./middlewares/load-user');
+const { renderHttpErrorMiddleware } = require('./middlewares/render-http-error');
 const { chatRouter } = require('./routes/chat');
 const { indexRouter } = require('./routes/index');
 const { loginRouter } = require('./routes/login');
@@ -49,56 +47,26 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(renderHttpErrorMiddleware);
+app.use(loadUserMiddleware);
 
 app.use('/', indexRouter);
 app.use('/chat', chatRouter);
 app.use('/login', loginRouter);
 app.use('/users', usersRouter);
 
-app.use((req, res, next) => {
-  next(createError(404));
-});
-
-app.use((err, req, res, next) => {
-  if (res.headersSent) {
-    return next(err);
-  }
-
-  let error = err;
-
-  if (typeof err === 'number') {
-    error = new HttpError(err);
-  }
-
-  if (error instanceof HttpError) {
-    return res.renderHttpError(error);
-  }
-
-  if (error instanceof AuthError) {
-    res.status(error.status);
-    return res.send(error);
-  }
-
-  if (!error.status) {
-    error.status = 500;
-  }
-
-  res.status(error.status);
-
-  const locals = {
-    error: req.app.get('env') === ENV.DEVELOPMENT ? error : {},
-  };
-
-  res.render('error', locals);
-});
-
-app.use((req, res) => {
+app.use((req) => {
   if (req.session.numberOfVisits === undefined) {
     req.session.numberOfVisits = 1;
   } else {
     req.session.numberOfVisits += 1;
   }
 });
+
+app.use((_req, _res, next) => {
+  next(createError(404));
+});
+
+app.use(renderHttpErrorMiddleware);
+app.use(errorHandlerMiddleware);
 
 module.exports = { app };

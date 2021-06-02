@@ -2,7 +2,7 @@
 
 const crypto = require('crypto');
 
-const { AuthError } = require('../error/auth-error');
+const { AuthError } = require('../errors/auth-error');
 const { mongoose } = require('../libs/mongoose');
 
 const schema = new mongoose.Schema({
