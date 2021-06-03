@@ -4,7 +4,7 @@ const { ENV } = require('../constants');
 const { AuthError } = require('../errors/auth-error');
 const { HttpError } = require('../errors/http-error');
 
-module.exports.errorHandlerMiddleware = (err, req, res, next) => {
+module.exports.handleErrorMiddleware = (err, req, res, next) => {
   if (res.headersSent) {
     return next(err);
   }

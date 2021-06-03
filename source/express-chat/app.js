@@ -11,7 +11,7 @@ const multer = require('multer');
 const logger = require('morgan');
 
 const { config } = require('./config');
-const { errorHandlerMiddleware } = require('./middlewares/error-handler');
+const { handleErrorMiddleware } = require('./middlewares/handle-error');
 const { loadUserMiddleware } = require('./middlewares/load-user');
 const { renderHttpErrorMiddleware } = require('./middlewares/render-http-error');
 const { chatRouter } = require('./routes/chat');
@@ -71,6 +71,6 @@ app.use((_req, _res, next) => {
 });
 
 app.use(renderHttpErrorMiddleware);
-app.use(errorHandlerMiddleware);
+app.use(handleErrorMiddleware);
 
 module.exports = { app };

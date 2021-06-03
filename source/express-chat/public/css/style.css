@@ -69,3 +69,7 @@ main {
 .main-nav__item:last-child {
   margin-left: auto;
 }
+
+.main-nav__logout-link {
+  cursor: pointer;
+}

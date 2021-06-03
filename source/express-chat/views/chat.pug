@@ -7,4 +7,4 @@ block content
   include ./_nav.pug
   main
     h1 Чат
-    p Пользователь: #{user.get('username')}
+    p= user ? `Пользователь: ${user.get('username')}` : 'Вы не авторизованы'
