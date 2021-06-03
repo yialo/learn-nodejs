@@ -2,6 +2,7 @@
 
 const crypto = require('crypto');
 
+const { AuthError } = require('../errors/auth-error');
 const { mongoose } = require('../libs/mongoose');
 
 const schema = new mongoose.Schema({
@@ -40,6 +41,24 @@ schema.virtual('password')
 
 schema.methods.checkPassword = function (password) {
   return this.encryptPassword(password) === this.hashedPassword;
+};
+
+schema.statics.authorize = async (username, password) => {
+  const { User } = this;
+
+  const user = await User.findOne({ username });
+
+  if (user) {
+    if (user.checkPassword(password)) {
+      return user;
+    } else {
+      throw new AuthError('неверный пароль');
+    }
+  } else {
+    const newUser = new User({ username, password });
+    await newUser.save();
+    return newUser;
+  }
 };
 
 module.exports.User = mongoose.model('User', schema);

@@ -10,7 +10,7 @@ class HttpError extends Error {
     Error.captureStackTrace(this, HttpError);
 
     this.status = status;
-    this.message = message ?? http.STATUS_CODES[status] ?? 'Error';
+    this.message = message ?? http.STATUS_CODES[status] ?? 'HttpError';
   }
 }
 

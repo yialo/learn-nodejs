@@ -1,8 +1,9 @@
 extends _layout
 
 block title
-  | Chat
+  = 'Home | '
 
 block content
-  h1 Hello Chat!
   include ./_nav.pug
+  main
+    h1 Hello World!

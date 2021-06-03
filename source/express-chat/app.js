@@ -7,23 +7,30 @@ const cookieParser = require('cookie-parser');
 const express = require('express');
 const session = require('express-session')
 const createError = require('http-errors');
+const multer = require('multer');
 const logger = require('morgan');
 
 const { config } = require('./config');
-const { ENV } = require('./constants');
-const { HttpError } = require('./error');
-const { sendHttpErrorMiddleware } = require('./middleware/send-http-error');
+const { handleErrorMiddleware } = require('./middlewares/handle-error');
+const { loadUserMiddleware } = require('./middlewares/load-user');
+const { renderHttpErrorMiddleware } = require('./middlewares/render-http-error');
+const { chatRouter } = require('./routes/chat');
 const { indexRouter } = require('./routes/index');
+const { loginRouter } = require('./routes/login');
+const { logoutRouter } = require('./routes/logout');
 const { usersRouter } = require('./routes/users');
 
 const app = express();
 
+app.use(logger('dev'));
+
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
-app.use(logger('dev'));
-
 app.use(express.json());
+
+const upload = multer();
+app.use(upload.array());
 
 app.use(express.urlencoded({ extended: false }));
 
@@ -41,45 +48,29 @@ app.use(session({
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use(sendHttpErrorMiddleware);
+app.use(loadUserMiddleware);
 
 app.use('/', indexRouter);
+app.use('/chat', chatRouter);
+app.use('/login', loginRouter);
+app.use('/logout', logoutRouter);
 app.use('/users', usersRouter);
 
-app.use((err, req, res) => {
-  let error = err;
-
-  if (typeof err === 'number') {
-    error = new HttpError(err);
-  }
-
-  if (error instanceof HttpError) {
-    res.sendHttpError(error);
-  } else {
-    if (!error.status) {
-      error.status = 500;
-    }
-
-    res.status(error.status);
-
-    const locals = {
-      error: req.app.get('env') === ENV.DEVELOPMENT ? error : {},
-    };
-
-    res.render('error', locals);
-  }
-});
-
-app.use((req, res) => {
+app.use((req, _res, next) => {
   if (req.session.numberOfVisits === undefined) {
     req.session.numberOfVisits = 1;
   } else {
     req.session.numberOfVisits += 1;
   }
+
+  next();
 });
 
-app.use((req, res, next) => {
+app.use((_req, _res, next) => {
   next(createError(404));
 });
+
+app.use(renderHttpErrorMiddleware);
+app.use(handleErrorMiddleware);
 
 module.exports = { app };

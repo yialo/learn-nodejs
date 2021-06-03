@@ -1,0 +1,10 @@
+extends _layout
+
+block title
+  = 'Chat | '
+
+block content
+  include ./_nav.pug
+  main
+    h1 Чат
+    p= user ? `Пользователь: ${user.get('username')}` : 'Вы не авторизованы'

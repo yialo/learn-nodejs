@@ -1,10 +1,12 @@
-const express = require('express');
+'use strict';
+
+const { Router } = require('express');
 const { ObjectID } = require('mongodb');
 
-const { HttpError } = require('../error');
+const { HttpError } = require('../errors/http-error');
 const { User } = require('../models/user');
 
-const usersRouter = express.Router();
+const usersRouter = Router();
 
 usersRouter.get('/', async (req, res, next) => {
   try {
@@ -23,16 +25,14 @@ usersRouter.get('/:id', async (req, res, next) => {
   try {
     userId = new ObjectID(req.params.id);
   } catch {
-    next(createNotFoundError());
-    return
+    return next(createNotFoundError());
   }
 
   try {
     const user = await User.findById(userId);
 
     if (!user) {
-      next(createNotFoundError());
-      return;
+      return next(createNotFoundError());
     }
 
     res.json(user);
