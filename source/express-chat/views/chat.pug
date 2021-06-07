@@ -7,7 +7,12 @@ block content
   include ./_nav.pug
   main.chat-room
     h1 Чат
-    p= user ? `Пользователь: ${user.get('username')}` : 'Вы не авторизованы'
+    p
+      if user
+        = 'Пользователь: '
+        span.chat-room__username #{user.get('username')}
+      else
+        | Вы не авторизованы
     div.chat-room__message-area
       p.chat-room__empty Сообщений нет
     form

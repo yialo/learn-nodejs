@@ -76,6 +76,10 @@ main {
 
 /* Chat room */
 
+.chat-room__username {
+  font-weight: 500;
+}
+
 .chat-room__message-area {
   margin-bottom: 1rem;
   max-width: 320px;
