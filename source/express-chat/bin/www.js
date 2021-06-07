@@ -4,6 +4,8 @@
 
 const http = require('http');
 
+const socketIo = require('socket.io');
+
 const { app } = require('../app');
 const { config } = require('../config');
 const { getLogger } = require('../libs/get-logger');
@@ -66,6 +68,15 @@ const port = normalizePort(process.env.PORT ?? config.port);
 app.set('port', port);
 
 const server = http.createServer(app);
+
+const io = socketIo(server);
+
+io.on('connection', (socket) => {
+  socket.emit('news', { data: 'Hello world' });
+  socket.on('another', (data) => {
+    console.log(data);
+  });
+});
 
 server.on('error', onError);
 server.on('listening', onListening);

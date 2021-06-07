@@ -8,3 +8,12 @@ block content
   main
     h1 Чат
     p= user ? `Пользователь: ${user.get('username')}` : 'Вы не авторизованы'
+  script(src='/socket.io/socket.io.js')
+  script.
+    (() => {
+      const socket = io.connect();
+      socket.on('news', (data) => {
+        console.log(data);
+      });
+      socket.emit('another', { some: 'bob' });
+    })();
