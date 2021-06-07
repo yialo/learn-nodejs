@@ -5,15 +5,55 @@ block title
 
 block content
   include ./_nav.pug
-  main
+  main.chat-room
     h1 Чат
     p= user ? `Пользователь: ${user.get('username')}` : 'Вы не авторизованы'
+    div.chat-room__message-area
+      p.chat-room__empty Сообщений нет
+    form
+      label(aria-label='Новое сообщение')
+        input(type='text', autofocus placeholder='Сообщение...')
   script(src='/socket.io/socket.io.js')
   script.
     (() => {
       const socket = io.connect();
-      socket.on('news', (data) => {
-        console.log(data);
+
+      const $room = document.querySelector('.chat-room');
+      const $messageArea = $room.querySelector('.chat-room__message-area');
+      const $form = $room.querySelector('form');
+      const $text = $form.querySelector('input');
+
+      const createMessageList = () => {
+        const $list = document.createElement('ul');
+        $list.classList.add('chat-room__message-list');
+        return $list;
+      };
+
+      $form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        const messageText = $text.value;
+        socket.emit('message', messageText);
+
+        $text.value = '';
       });
-      socket.emit('another', { some: 'bob' });
+
+      socket.on('message', (messageText) => {
+        const $message = document.createElement('li');
+        $message.textContent = messageText;
+
+        let $list = $messageArea.querySelector('.chat-room__message-list');
+
+        if ($list === null) {
+          $list = createMessageList();
+          $messageArea.replaceChild($list, $messageArea.firstElementChild);
+        }
+
+        $list.appendChild($message);
+
+        $messageArea.scrollTo({
+          top: $list.offsetHeight,
+          behavior: 'smooth',
+        });
+      });
     })();

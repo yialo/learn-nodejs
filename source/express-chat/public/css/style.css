@@ -73,3 +73,26 @@ main {
 .main-nav__logout-link {
   cursor: pointer;
 }
+
+/* Chat room */
+
+.chat-room__message-area {
+  margin-bottom: 1rem;
+  max-width: 320px;
+  height: 12rem;
+  overflow-y: auto;
+  border: 1px dotted black;
+  padding: 1rem;
+}
+
+.chat-room__empty {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.chat-room__message-list {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
