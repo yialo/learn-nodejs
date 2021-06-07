@@ -8,7 +8,10 @@ module.exports.createChatIo = (server) => {
   io.on('connection', (socket) => {
     socket.on('message', (messageText, done) => {
       socket.broadcast.emit('message', messageText);
-      done();
+
+      if (typeof done === 'function') {
+        done();
+      }
     });
   });
 
