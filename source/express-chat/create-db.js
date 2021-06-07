@@ -50,7 +50,7 @@ const close = async () => {
 
 const userConfigs = [
   { username: 'Bob', password: '123' },
-  { username: 'Bob', password: '456' },
+  { username: 'Bull', password: '456' },
   { username: 'admin', password: 'cool' },
 ];
 
