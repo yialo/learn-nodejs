@@ -6,8 +6,9 @@ module.exports.createChatIo = (server) => {
   const io = socketIo(server);
 
   io.on('connection', (socket) => {
-    socket.on('message', (messageText) => {
-      socket.emit('message', messageText);
+    socket.on('message', (messageText, done) => {
+      socket.broadcast.emit('message', messageText);
+      done();
     });
   });
 

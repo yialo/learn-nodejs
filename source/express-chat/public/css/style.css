@@ -85,13 +85,15 @@ main {
   max-width: 320px;
   height: 12rem;
   overflow-y: auto;
-  border: 1px dotted black;
+  border: 1px solid gainsboro;
+  border-radius: 0.25rem;
   padding: 1rem;
 }
 
 .chat-room__empty {
   margin-top: 0;
   margin-bottom: 0;
+  color: gray;
 }
 
 .chat-room__message-list {
@@ -99,4 +101,18 @@ main {
   margin-bottom: 0;
   padding-left: 0;
   list-style-type: none;
+}
+
+.chat-room__form {
+  max-width: 320px;
+}
+
+.chat-room__field {
+  display: block;
+  width: 100%;
+}
+
+.chat-room__input {
+  width: 100%;
+  padding: 0.25rem;
 }

@@ -15,9 +15,9 @@ block content
         | Вы не авторизованы
     div.chat-room__message-area
       p.chat-room__empty Сообщений нет
-    form
-      label(aria-label='Новое сообщение')
-        input(type='text', autofocus placeholder='Сообщение...')
+    form.chat-room__form
+      label.chat-room__field(aria-label='Новое сообщение')
+        input.chat-room__input(type='text', autofocus placeholder='Сообщение...')
   script(src='/socket.io/socket.io.js')
   script.
     (() => {
@@ -34,16 +34,7 @@ block content
         return $list;
       };
 
-      $form.addEventListener('submit', (event) => {
-        event.preventDefault();
-
-        const messageText = $text.value;
-        socket.emit('message', messageText);
-
-        $text.value = '';
-      });
-
-      socket.on('message', (messageText) => {
+      const addMessage = (messageText) => {
         const $message = document.createElement('li');
         $message.textContent = messageText;
 
@@ -60,5 +51,24 @@ block content
           top: $list.offsetHeight,
           behavior: 'smooth',
         });
+      };
+
+      $form.addEventListener('submit', (event) => {
+        event.preventDefault();
+
+        $text.disabled = true;
+
+        const messageText = $text.value;
+
+        socket.emit('message', messageText, () => {
+          addMessage(messageText);
+
+          $text.disabled = false;
+          $text.focus();
+        });
+
+        $text.value = '';
       });
+
+      socket.on('message', addMessage);
     })();
