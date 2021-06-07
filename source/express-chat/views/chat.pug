@@ -7,6 +7,7 @@ block content
   include ./_nav.pug
   main.chat-room
     h1 Чат
+    p.chat-room__status Устанавливаем соединение...
     p
       if user
         = 'Пользователь: '
@@ -15,15 +16,20 @@ block content
         | Вы не авторизованы
     div.chat-room__message-area
       p.chat-room__empty Сообщений нет
-    form.chat-room__form
+    form
       label.chat-room__field(aria-label='Новое сообщение')
         input.chat-room__input(type='text', autofocus placeholder='Сообщение...')
   script(src='/socket.io/socket.io.js')
   script.
     (() => {
-      const socket = io.connect();
+      const MAX_RECONNECT_ATTEMPT = 3;
+
+      const socket = io({
+        reconnection: false,
+      });
 
       const $room = document.querySelector('.chat-room');
+      const $status = $room.querySelector('.chat-room__status');
       const $messageArea = $room.querySelector('.chat-room__message-area');
       const $form = $room.querySelector('form');
       const $text = $form.querySelector('input');
@@ -34,7 +40,11 @@ block content
         return $list;
       };
 
-      const addMessage = (messageText) => {
+      const printStatus = (statusText) => {
+        $status.textContent = statusText;
+      };
+
+      const addMessageToList = (messageText) => {
         const $message = document.createElement('li');
         $message.textContent = messageText;
 
@@ -53,7 +63,7 @@ block content
         });
       };
 
-      $form.addEventListener('submit', (event) => {
+      const sendMessage = (event) => {
         event.preventDefault();
 
         $text.disabled = true;
@@ -61,14 +71,43 @@ block content
         const messageText = $text.value;
 
         socket.emit('message', messageText, () => {
-          addMessage(messageText);
+          addMessageToList(messageText);
 
           $text.disabled = false;
           $text.focus();
         });
 
         $text.value = '';
-      });
+      };
 
-      socket.on('message', addMessage);
+      $form.addEventListener('submit', sendMessage);
+
+      let reconnectAttempt = 0;
+
+      const reconnect = () => {
+        if (reconnectAttempt < MAX_RECONNECT_ATTEMPT) {
+          reconnectAttempt++;
+          printStatus('Устанавливаем соединение...');
+          socket.once('connect_error', () => {
+            setTimeout(reconnect, 500);
+          });
+          socket.connect();
+        } else {
+          alert('Соединение потеряно навсегда:(');
+        }
+      };
+
+      socket
+        .on('connect', () => {
+          $form.addEventListener('submit', sendMessage);
+          $text.disabled = false;
+          printStatus('Соединение установлено');
+        })
+        .on('disconnect', () => {
+          $form.removeEventListener('submit', sendMessage);
+          $text.disabled = true;
+          printStatus('Соединение потеряно');
+          reconnect();
+        })
+        .on('message', addMessageToList);
     })();
