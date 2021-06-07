@@ -30,6 +30,10 @@ main {
 
 /* Login form */
 
+.login-form {
+  max-width: 320px;
+}
+
 .login-form__field {
   display: block;
 }
@@ -78,6 +82,19 @@ main {
 
 .chat-room {
   max-width: 320px;
+}
+
+.chat-room__error-message {
+  margin-bottom: 1.5rem;
+  color: tomato;
+}
+
+.chat-room__login-link {
+  border: 1px solid mediumblue;
+  border-radius: 0.5rem;
+  padding: 0.5rem 1.5rem;
+  font-weight: 500;
+  color: mediumblue;
 }
 
 .chat-room__status {

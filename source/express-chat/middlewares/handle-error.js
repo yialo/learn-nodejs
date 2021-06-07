@@ -5,6 +5,8 @@ const { AuthError } = require('../errors/auth-error');
 const { HttpError } = require('../errors/http-error');
 
 module.exports.handleErrorMiddleware = (err, req, res, next) => {
+  console.log('--- inside: handleErrorMiddleware');
+
   if (res.headersSent) {
     return next(err);
   }
