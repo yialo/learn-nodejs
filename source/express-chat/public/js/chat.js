@@ -1,3 +1,4 @@
+const ALERT_DURATION = 3000;
 const MAX_RECONNECT_ATTEMPT = 3;
 
 const socket = io({
@@ -9,6 +10,7 @@ const $status = $room.querySelector('.chat-room__status');
 const $messageArea = $room.querySelector('.chat-room__message-area');
 const $form = $room.querySelector('form');
 const $text = $form.querySelector('input');
+const $alert = $room.querySelector('.chat-room__alert');
 
 const currentUserName = document.querySelector('.chat-room__username')?.textContent;
 
@@ -20,6 +22,23 @@ const createMessageList = () => {
 
 const printStatus = (statusText) => {
   $status.textContent = statusText;
+};
+
+let isAlertVisible = false;
+
+const showAlert = (message) => {
+  isAlertVisible = true;
+  $alert.textContent = message;
+  $alert.classList.add('visible');
+  setTimeout(() => {
+    $alert.classList.remove('visible');
+    $alert.addEventListener('transitionend', (event) => {
+      if (event.propertyName === 'opacity' && isAlertVisible) {
+        $alert.textContent = '';
+        isAlertVisible = false;
+      }
+    }, { once: true });
+  }, ALERT_DURATION);
 };
 
 const addMessageToList = (author, text) => {
@@ -101,4 +120,10 @@ socket
   })
   .on('message', ({ author, text }) => {
     addMessageToList(author, text);
+  })
+  .on('join', (username) => {
+    showAlert(`Пользователь ${username} подключился`);
+  })
+  .on('leave', (username) => {
+    showAlert(`Пользователь ${username} отключился`);
   });

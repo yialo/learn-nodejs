@@ -37,6 +37,7 @@ module.exports.createChatSocket = (httpServer) => {
         }
 
         socket.handshake.user = user;
+        socket.broadcast.emit('join', user.username);
       }
 
       socket.on('message', (messageText, done) => {
@@ -51,8 +52,16 @@ module.exports.createChatSocket = (httpServer) => {
           done();
         }
       });
+
+      socket.on('disconnect', () => {
+        socket.broadcast.emit('leave', socket.handshake.user.username);
+      });
     } catch (error) {
-      console.log(error.message);
+      const errorMessage = `Socket.io session error: ${
+        error instanceof HttpError ? `status ${error.status}, ` : ''
+      }${error.message}`;
+
+      console.log(errorMessage);
     }
   });
 

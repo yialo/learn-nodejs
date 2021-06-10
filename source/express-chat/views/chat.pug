@@ -22,6 +22,7 @@ block content
       form
         label.chat-room__field(aria-label='Новое сообщение')
           input.chat-room__input(type='text', autofocus placeholder='Сообщение...')
+      p.chat-room__alert
 
   if !error && user
     script(src='/socket.io/socket.io.js')
