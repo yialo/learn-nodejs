@@ -1,23 +1,23 @@
 -
   const links = [
     {
-      label: 'Home',
+      label: 'Главная',
       href: '/',
     },
     {
-      label: 'Chat',
+      label: 'Чат',
       href: '/chat',
     },
     {
-      label: 'Users',
+      label: 'Пользователи',
       href: '/users',
     },
     user ? ({
-      label: 'Logout',
+      label: 'Выйти',
       href: undefined,
       class: 'main-nav__logout-link'
     }) : ({
-      label: 'Login',
+      label: 'Войти',
       href: '/login',
     })
   ];

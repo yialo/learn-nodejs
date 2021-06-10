@@ -30,6 +30,7 @@ const showAlert = (message) => {
   isAlertVisible = true;
   $alert.textContent = message;
   $alert.classList.add('visible');
+
   setTimeout(() => {
     $alert.classList.remove('visible');
     $alert.addEventListener('transitionend', (event) => {
