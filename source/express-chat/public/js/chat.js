@@ -10,6 +10,8 @@ const $messageArea = $room.querySelector('.chat-room__message-area');
 const $form = $room.querySelector('form');
 const $text = $form.querySelector('input');
 
+const currentUserName = document.querySelector('.chat-room__username')?.textContent;
+
 const createMessageList = () => {
   const $list = document.createElement('ul');
   $list.classList.add('chat-room__message-list');
@@ -20,9 +22,18 @@ const printStatus = (statusText) => {
   $status.textContent = statusText;
 };
 
-const addMessageToList = (messageText) => {
+const addMessageToList = (author, text) => {
+  const $author = document.createElement('span');
+  $author.classList.add('chat-room__message-author');
+  $author.textContent = author;
+
+  const $text = document.createElement('span');
+  $text.classList.add('chat-room__message-text');
+  $text.textContent = text;
+
   const $message = document.createElement('li');
-  $message.textContent = messageText;
+  $message.classList.add('chat-room__message')
+  $message.append($author, $text);
 
   let $list = $messageArea.querySelector('.chat-room__message-list');
 
@@ -42,18 +53,21 @@ const addMessageToList = (messageText) => {
 const sendMessage = (event) => {
   event.preventDefault();
 
+  const messageText = $text.value.trim();
+  $text.value = '';
+
+  if (!messageText) {
+    return;
+  }
+
   $text.disabled = true;
 
-  const messageText = $text.value;
-
   socket.emit('message', messageText, () => {
-    addMessageToList(messageText);
+    addMessageToList(currentUserName, messageText);
 
     $text.disabled = false;
     $text.focus();
   });
-
-  $text.value = '';
 };
 
 $form.addEventListener('submit', sendMessage);
@@ -85,4 +99,6 @@ socket
     printStatus('Соединение потеряно');
     reconnect();
   })
-  .on('message', addMessageToList);
+  .on('message', ({ author, text }) => {
+    addMessageToList(author, text);
+  });

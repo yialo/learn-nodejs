@@ -7,7 +7,7 @@ const http = require('http');
 const { app } = require('../app');
 const { config } = require('../config');
 const { getLogger } = require('../libs/get-logger');
-const { createChatIo } = require('../ws-chat');
+const { createChatSocket } = require('../socket');
 
 const log = getLogger(module);
 
@@ -68,7 +68,7 @@ app.set('port', port);
 
 const server = http.createServer(app);
 
-createChatIo(server);
+createChatSocket(server);
 
 server.on('error', onError);
 server.on('listening', onListening);
