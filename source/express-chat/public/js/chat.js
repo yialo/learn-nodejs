@@ -1,8 +1,6 @@
 const ALERT_DURATION = 3000;
 const MAX_RECONNECT_ATTEMPT = 3;
 
-console.log('--- io:', io);
-
 const socket = io({
   reconnection: false,
 });

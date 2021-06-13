@@ -69,8 +69,10 @@ const port = normalizePort(process.env.PORT ?? config.port);
 app.set('port', port);
 
 const server = createServer(app);
+const io = new IoServer(server);
 
-createChatSocket(server);
+app.set('io', io);
+createChatSocket(io);
 
 server.on('error', onError);
 server.on('listening', onListening);
