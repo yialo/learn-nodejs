@@ -14,15 +14,13 @@ const { User } = require('./models/user');
 const getSessionById = promisify(sessionStore.get).bind(sessionStore);
 
 module.exports.createChatSocket = (httpServer) => {
-  const io = new Server();
+  const io = new Server(httpServer);
 
   io.on('connection', async (socket) => {
     socket.handshake.cookies = parse(socket.handshake.headers.cookie) ?? {};
     const sid = signedCookie(socket.handshake.cookies['connect.sid'], config.session.secret);
 
-    sessionIdKeeper.add(sid);
-
-    console.log('--- connection to WS', sessionIdKeeper.sids);
+    console.log('--- connection to WS');
 
     try {
       const session = await getSessionById(sid);
