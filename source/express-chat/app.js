@@ -61,4 +61,4 @@ app.use((_req, _res, next) => {
 app.use(renderHttpErrorMiddleware);
 app.use(handleErrorMiddleware);
 
-module.exports = { app };
+module.exports.app = app;

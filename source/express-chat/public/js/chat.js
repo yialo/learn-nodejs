@@ -1,6 +1,8 @@
 const ALERT_DURATION = 3000;
 const MAX_RECONNECT_ATTEMPT = 3;
 
+console.log('--- io:', io);
+
 const socket = io({
   reconnection: false,
 });
@@ -103,9 +105,11 @@ const reconnect = () => {
     });
     socket.connect();
   } else {
-    alert('Соединение потеряно навсегда:(');
+    printStatus('Восстановить соединение не удалось');
   }
 };
+
+$text.focus();
 
 socket
   .on('connect', () => {
@@ -123,8 +127,15 @@ socket
     addMessageToList(author, text);
   })
   .on('join', (username) => {
-    showAlert(`Пользователь ${username} подключился`);
+    if (username !== currentUserName) {
+      showAlert(`Пользователь ${username} подключился`);
+    }
   })
   .on('leave', (username) => {
-    showAlert(`Пользователь ${username} отключился`);
+    if (username !== currentUserName) {
+      showAlert(`Пользователь ${username} отключился`);
+    }
+  })
+  .on('error', () => {
+    reconnect();
   });

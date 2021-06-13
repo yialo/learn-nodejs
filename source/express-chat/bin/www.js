@@ -2,7 +2,9 @@
 
 'use strict';
 
-const http = require('http');
+const { createServer } = require('http');
+
+const { Server: IoServer } = require('socket.io');
 
 const { app } = require('../app');
 const { config } = require('../config');
@@ -66,7 +68,7 @@ const onListening = () => {
 const port = normalizePort(process.env.PORT ?? config.port);
 app.set('port', port);
 
-const server = http.createServer(app);
+const server = createServer(app);
 
 createChatSocket(server);
 
