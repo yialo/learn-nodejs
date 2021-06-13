@@ -38,11 +38,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(loadUserMiddleware);
 
-app.use((req, res, next) => {
-  console.log('---IO adapter:', req.app.settings.io.sockets.adapter);
-  next();
-});
-
 app.use('/', indexRouter);
 app.use('/chat', chatRouter);
 app.use('/login', loginRouter);

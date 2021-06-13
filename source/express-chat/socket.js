@@ -17,8 +17,6 @@ module.exports.createChatSocket = (io) => {
     socket.handshake.cookies = parse(socket.handshake.headers.cookie) ?? {};
     const sid = signedCookie(socket.handshake.cookies['connect.sid'], config.session.secret);
 
-    console.log('--- connection to WS');
-
     try {
       const session = await getSessionById(sid);
 
@@ -40,7 +38,8 @@ module.exports.createChatSocket = (io) => {
       }
 
       socket.on('message', (messageText, done) => {
-        console.log('--- adapter', io.sockets.adapter);
+        console.log('--- socket.rooms:', socket.rooms);
+        console.log('--- socket.sockets:', io.sockets.sockets);
 
         const payload = {
           author: socket.handshake.user.username,
