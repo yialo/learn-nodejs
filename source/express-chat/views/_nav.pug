@@ -1,23 +1,23 @@
 -
   const links = [
     {
-      label: 'Home',
+      label: 'Главная',
       href: '/',
     },
     {
-      label: 'Chat',
+      label: 'Чат',
       href: '/chat',
     },
     {
-      label: 'Users',
+      label: 'Пользователи',
       href: '/users',
     },
     user ? ({
-      label: 'Logout',
+      label: 'Выйти',
       href: undefined,
       class: 'main-nav__logout-link'
     }) : ({
-      label: 'Login',
+      label: 'Войти',
       href: '/login',
     })
   ];
@@ -27,20 +27,18 @@ nav.main-nav
     each link in links
       li.main-nav__item
         a(href=link.href, id=link.id, class=link.class) #{link.label}
-script.
-  (() => {
-    const $logout = document.querySelector('.main-nav__logout-link');
+script(type='module').
+  const $logout = document.querySelector('.main-nav__logout-link');
 
-    if ($logout) {
-      $logout.addEventListener('click', async () => {
-        try {
-          await window.fetch('/logout', {
-            method: 'POST',
-          });
-          window.location.href = '/';
-        } catch {
-          window.alert('Не удалось выйти, попробуйще ещё раз');
-        }
-      });
-    }
-  })();
+  if ($logout) {
+    $logout.addEventListener('click', async () => {
+      try {
+        await window.fetch('/logout', {
+          method: 'POST',
+        });
+        window.location.href = '/';
+      } catch {
+        window.alert('Не удалось выйти, попробуйще ещё раз');
+      }
+    });
+  }

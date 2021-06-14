@@ -9,7 +9,7 @@
     }
   },
   "session": {
-    "secret": "KillerIsTs",
+    "secret": "thisIsNode",
     "cookie": {
       "path": "/",
       "httpOnly": true,

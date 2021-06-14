@@ -2,12 +2,14 @@
 
 'use strict';
 
-const http = require('http');
+const { createServer } = require('http');
+
+const { Server: IoServer } = require('socket.io');
 
 const { app } = require('../app');
 const { config } = require('../config');
 const { getLogger } = require('../libs/get-logger');
-const { createChatIo } = require('../ws-chat');
+const { createChatSocket } = require('../socket');
 
 const log = getLogger(module);
 
@@ -66,9 +68,11 @@ const onListening = () => {
 const port = normalizePort(process.env.PORT ?? config.port);
 app.set('port', port);
 
-const server = http.createServer(app);
+const server = createServer(app);
+const io = new IoServer(server);
 
-createChatIo(server);
+app.set('io', io);
+createChatSocket(io);
 
 server.on('error', onError);
 server.on('listening', onListening);

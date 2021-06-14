@@ -5,109 +5,25 @@ block title
 
 block content
   include ./_nav.pug
+
   main.chat-room
     h1 Чат
-    p.chat-room__status Устанавливаем соединение...
-    p
-      if user
+    if error
+      p.chat-room__error-message= error.message
+      a.chat-room__login-link(href='/login') Login
+
+    else if user
+      p.chat-room__status Устанавливаем соединение...
+      p
         = 'Пользователь: '
         span.chat-room__username #{user.get('username')}
-      else
-        | Вы не авторизованы
-    div.chat-room__message-area
-      p.chat-room__empty Сообщений нет
-    form
-      label.chat-room__field(aria-label='Новое сообщение')
-        input.chat-room__input(type='text', autofocus placeholder='Сообщение...')
-  script(src='/socket.io/socket.io.js')
-  script.
-    (() => {
-      const MAX_RECONNECT_ATTEMPT = 3;
+      div.chat-room__message-area
+        p.chat-room__empty Сообщений нет
+      form
+        label.chat-room__field(aria-label='Новое сообщение')
+          input.chat-room__input(type='text', autofocus placeholder='Сообщение...')
+      p.chat-room__alert
 
-      const socket = io({
-        reconnection: false,
-      });
-
-      const $room = document.querySelector('.chat-room');
-      const $status = $room.querySelector('.chat-room__status');
-      const $messageArea = $room.querySelector('.chat-room__message-area');
-      const $form = $room.querySelector('form');
-      const $text = $form.querySelector('input');
-
-      const createMessageList = () => {
-        const $list = document.createElement('ul');
-        $list.classList.add('chat-room__message-list');
-        return $list;
-      };
-
-      const printStatus = (statusText) => {
-        $status.textContent = statusText;
-      };
-
-      const addMessageToList = (messageText) => {
-        const $message = document.createElement('li');
-        $message.textContent = messageText;
-
-        let $list = $messageArea.querySelector('.chat-room__message-list');
-
-        if ($list === null) {
-          $list = createMessageList();
-          $messageArea.replaceChild($list, $messageArea.firstElementChild);
-        }
-
-        $list.appendChild($message);
-
-        $messageArea.scrollTo({
-          top: $list.offsetHeight,
-          behavior: 'smooth',
-        });
-      };
-
-      const sendMessage = (event) => {
-        event.preventDefault();
-
-        $text.disabled = true;
-
-        const messageText = $text.value;
-
-        socket.emit('message', messageText, () => {
-          addMessageToList(messageText);
-
-          $text.disabled = false;
-          $text.focus();
-        });
-
-        $text.value = '';
-      };
-
-      $form.addEventListener('submit', sendMessage);
-
-      let reconnectAttempt = 0;
-
-      const reconnect = () => {
-        if (reconnectAttempt < MAX_RECONNECT_ATTEMPT) {
-          reconnectAttempt++;
-          printStatus('Устанавливаем соединение...');
-          socket.once('connect_error', () => {
-            setTimeout(reconnect, 500);
-          });
-          socket.connect();
-        } else {
-          alert('Соединение потеряно навсегда:(');
-        }
-      };
-
-      socket
-        .on('connect', () => {
-          $form.addEventListener('submit', sendMessage);
-          $text.disabled = false;
-          printStatus('Соединение установлено');
-        })
-        .on('disconnect', () => {
-          $form.removeEventListener('submit', sendMessage);
-          $text.disabled = true;
-          printStatus('Соединение потеряно');
-          reconnect();
-        })
-        .on('message', addMessageToList);
-    })();
+  if !error && user
+    script(src='/socket.io/socket.io.js')
+    script(type='module', src='/js/chat.js')
