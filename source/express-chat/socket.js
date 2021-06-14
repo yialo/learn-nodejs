@@ -7,6 +7,7 @@ const { signedCookie } = require('cookie-parser');
 
 const { config } = require('./config');
 const { HttpError } = require('./errors/http-error');
+const { runtimeSessionKeeper, SESSION_KEEPER_EVENTS } = require('./libs/runtime-session-keeper');
 const { sessionStore } = require('./libs/session-store');
 const { User } = require('./models/user');
 
@@ -38,9 +39,6 @@ module.exports.createChatSocket = (io) => {
       }
 
       socket.on('message', (messageText, done) => {
-        console.log('--- socket.rooms:', socket.rooms);
-        console.log('--- socket.sockets:', io.sockets.sockets);
-
         const payload = {
           author: socket.handshake.user.username,
           text: messageText,
@@ -67,5 +65,21 @@ module.exports.createChatSocket = (io) => {
 
       console.log(errorMessage);
     }
+  });
+
+  runtimeSessionKeeper.on(SESSION_KEEPER_EVENTS.RELOAD, (targetSid) => {
+    const allSockets = [...io.sockets.sockets.values()];
+
+    allSockets.forEach((socket) => {
+      const cookie = parse(socket.handshake.headers.cookie) ?? {};
+      const sid = signedCookie(cookie['connect.sid'], config.session.secret);
+
+      if (sid !== targetSid) {
+        return;
+      }
+
+      socket.emit('logout');
+      socket.disconnect(true);
+    });
   });
 };

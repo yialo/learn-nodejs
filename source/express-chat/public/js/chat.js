@@ -134,6 +134,9 @@ socket
       showAlert(`Пользователь ${username} отключился`);
     }
   })
+  .on('logout', () => {
+    window.location = '/';
+  })
   .on('error', () => {
     reconnect();
   });
